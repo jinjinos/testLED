@@ -45,8 +45,9 @@ typedef struct tagIR_data
 #define TimeOut_cnt		250
 
 extern bit TimeOut;
+extern bit new_code;
 extern unsigned char key_code;
-extern unsigned char redCodeReceice(void);
+//extern unsigned char redCodeReceice(void);
 
 
 

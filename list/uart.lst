@@ -1,10 +1,10 @@
-C51 COMPILER V9.00   UART                                                                  09/19/2016 23:14:02 PAGE 1   
+C51 COMPILER V9.53.0.0   UART                                                              09/20/2016 14:39:31 PAGE 1   
 
 
-C51 COMPILER V9.00, COMPILATION OF MODULE UART
+C51 COMPILER V9.53.0.0, COMPILATION OF MODULE UART
 OBJECT MODULE PLACED IN .\out\uart.obj
-COMPILER INVOKED BY: D:\Keil\C51\BIN\C51.EXE src\uart.c LARGE BROWSE INCDIR(.\inc) DEBUG OBJECTEXTEND PRINT(.\list\uart.
-                    -lst) OBJECT(.\out\uart.obj)
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\uart.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\inc) DEBUG OBJECTEXTE
+                    -ND PRINT(.\list\uart.lst) OBJECT(.\out\uart.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
   52   2                      if(recMessage->pOut == &(recMessage->rBuffer[Buffer_Size]))
   53   2                      {
   54   3                              recMessage->pOut = &(recMessage->rBuffer[0]);
-C51 COMPILER V9.00   UART                                                                  09/19/2016 23:14:02 PAGE 2   
+C51 COMPILER V9.53.0.0   UART                                                              09/20/2016 14:39:31 PAGE 2   
 
   55   3                      }
   56   2                      recMessage->rNum--;
@@ -126,7 +126,7 @@ line level    source
  114   1              AUXR |= 0x10;           //BRTR = 1,启动独立波特率发生器
  115   1              
  116   1      #endif  
-C51 COMPILER V9.00   UART                                                                  09/19/2016 23:14:02 PAGE 3   
+C51 COMPILER V9.53.0.0   UART                                                              09/20/2016 14:39:31 PAGE 3   
 
  117   1              
  118   1      #ifdef UART_USE_INT
@@ -164,74 +164,77 @@ line level    source
  150   1      }
  151          
  152          
- 153          //通过串口发送一个字符串
- 154          void UART_SendString(unsigned char *pStr)
- 155          {
- 156   1              while(*pStr != '\0')
- 157   1              {
- 158   2                      UART_SendByte(*pStr);
- 159   2                      pStr++;
- 160   2              }
- 161   1      }
- 162                  
+ 153          /*
+ 154          //通过串口发送一个字符串
+ 155          void UART_SendString(unsigned char *pStr)
+ 156          {
+ 157                  while(*pStr != '\0')
+ 158                  {
+ 159                          UART_SendByte(*pStr);
+ 160                          pStr++;
+ 161                  }
+ 162          }
  163                  
- 164          
- 165          #ifdef UART_USE_INT
- 166          //串口中断服务函数 //TI和RI需软件清零
- 167          void UART_InterruptServer(void) interrupt 4
- 168          {
- 169   1              unsigned char rdata = 0x00;
- 170   1              if(RI)
- 171   1              {
- 172   2                      //清接收中断标志位
- 173   2                      RI = 0;
- 174   2                      rdata = SBUF;                   //接收数据
- 175   2                      UART_SendByte(rdata);   //串口发送数据回显
- 176   2                      /*
- 177   2                      if(rdata == 0xFA)
- 178   2                      {
-C51 COMPILER V9.00   UART                                                                  09/19/2016 23:14:02 PAGE 4   
+ 164          */
+ 165                  
+ 166          
+ 167          #ifdef UART_USE_INT
+ 168          //串口中断服务函数 //TI和RI需软件清零
+ 169          void UART_InterruptServer(void) interrupt 4
+ 170          {
+ 171   1              unsigned char rdata = 0x00;
+ 172   1              if(RI)
+ 173   1              {
+ 174   2                      //清接收中断标志位
+ 175   2                      RI = 0;
+ 176   2                      rdata = SBUF;                   //接收数据
+ 177   2                      UART_SendByte(rdata);   //串口发送数据回显
+ 178   2                      MsgIn(&recMessage,rdata);
+C51 COMPILER V9.53.0.0   UART                                                              09/20/2016 14:39:31 PAGE 4   
 
- 179   2                              tFlag = 1;
- 180   2                      }
- 181   2                      else if(rdata == 0xFF)
- 182   2                      {
- 183   2                              tFlag = 2;
- 184   2                      }
- 185   2                      else if(rdata == 0xFB)
- 186   2                      {
- 187   2                              tFlag = 3;
- 188   2                      }
- 189   2                      else
- 190   2                      {
- 191   2                              MsgIn(&recMessage,rdata);
- 192   2                              UART_SendByte(rdata);   //串口发送数据回显
- 193   2                      }
- 194   2      */
- 195   2              }
- 196   1              else    // if(TI)
- 197   1              {
- 198   2                      //清发送中断标志位
- 199   2                      TI = 0;                 //移植printf的方法2
- 200   2              }
- 201   1      }
- 202          #endif
- 203          
- 204          
- 205          
- 206          //串口移植printf 方法1
- 207          char putchar (char ch)
- 208          {
- 209   1              UART_SendByte(ch);
- 210   1              return ch;
- 211   1      }
- 212          
- 213          
- 214          
+ 179   2                      /*
+ 180   2                      if(rdata == 0xFA)
+ 181   2                      {
+ 182   2                              tFlag = 1;
+ 183   2                      }
+ 184   2                      else if(rdata == 0xFF)
+ 185   2                      {
+ 186   2                              tFlag = 2;
+ 187   2                      }
+ 188   2                      else if(rdata == 0xFB)
+ 189   2                      {
+ 190   2                              tFlag = 3;
+ 191   2                      }
+ 192   2                      else
+ 193   2                      {
+ 194   2                              MsgIn(&recMessage,rdata);
+ 195   2                              UART_SendByte(rdata);   //串口发送数据回显
+ 196   2                      }
+ 197   2      */
+ 198   2              }
+ 199   1              else    // if(TI)
+ 200   1              {
+ 201   2                      //清发送中断标志位
+ 202   2                      TI = 0;                 //移植printf的方法2
+ 203   2              }
+ 204   1      }
+ 205          #endif
+ 206          
+ 207          
+ 208          
+ 209          //串口移植printf 方法1
+ 210          char putchar (char ch)
+ 211          {
+ 212   1              UART_SendByte(ch);
+ 213   1              return ch;
+ 214   1      }
+ 215          
+ 216          
+ 217          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    605    ----
+   CODE SIZE        =    635    ----
    CONSTANT SIZE    =     47    ----
    XDATA SIZE       =     72      10
    PDATA SIZE       =   ----    ----

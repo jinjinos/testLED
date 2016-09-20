@@ -20,7 +20,7 @@ void Delay1ms()		//@18.432MHz
 	} while (--i);
 }
 
-
+/*
 void Delay1us()		//@18.432MHz
 {
 	unsigned char i;
@@ -30,6 +30,7 @@ void Delay1us()		//@18.432MHz
 	i = 1;
 	while (--i);
 }
+*/
 
 void delayNms(unsigned int N)
 {

@@ -64,7 +64,7 @@ void  Decode(void)
 void INT1Service(void) interrupt 2 using 1
 {
 	static unsigned char m=0;
-	TR1=1;			//定时器1开始工作
+	TR1 = 1;			//定时器1开始工作
 	
     T1_CNT_bk = T1_CNT;     // 备份时间计数值，即前一个下降沿到本下降沿的时间间隔
     T1_CNT = 0x00;          // 清空时间计数值
@@ -89,8 +89,7 @@ void INT1Service(void) interrupt 2 using 1
 				 //new_code=1;
 				TR1=0;
                 /*进行解码操作*/
-                Decode();     // 解码
-					
+                Decode();     // 解码	
             }
         }
         if(T1_CNT_bk > GTime)   // 如果时间间隔>引导码时长
@@ -110,7 +109,7 @@ void INT1Service(void) interrupt 2 using 1
 
 
 
-
+/*
 //遥控解码
 unsigned char redCodeReceice(void)
 {
@@ -174,3 +173,4 @@ unsigned char redCodeReceice(void)
 
 	return key;
 }
+*/

@@ -132,16 +132,6 @@ void DS1302_Write_Time(unsigned char *pTime)
 		ds1302_add -= 2;
 	}
 	
-	/*
-	Write_DS1302(ds1302_year_add,pTime[0]);		//年
-	Write_DS1302(ds1302_month_add,pTime[2]);		//月
-	Write_DS1302(ds1302_date_add,pTime[3]);		//日
-	Write_DS1302(ds1302_day_add,pTime[1]);		//周
-	Write_DS1302(ds1302_hr_add,pTime[4]);		//时		24???
-	Write_DS1302(ds1302_min_add,pTime[5]);		//分
-	Write_DS1302(ds1302_sec_add,pTime[6]);		//秒
-	Write_DS1302(ds1302_day_add,pTime[1]);		//周
-	*/
 	Write_DS1302(ds1302_control_add,0x80);	//打开写保护
 }
 
@@ -161,17 +151,6 @@ void  DS1302_Read_Time(unsigned char * time_buf)
 		*(pTime + i) = Read_DS1302(ds1302_addr);
 		ds1302_addr -= 2;
 	}
-	
-	/*
-	time_buf[0]=Read_DS1302(ds1302_year_add);		//年
-	time_buf[1]=Read_DS1302(ds1302_day_add);		//周
-	time_buf[2]=Read_DS1302(ds1302_month_add);		//月
-	time_buf[3]=Read_DS1302(ds1302_date_add);		//日
-	time_buf[4]=Read_DS1302(ds1302_hr_add);			//时
-	time_buf[5]=Read_DS1302(ds1302_min_add);		//分
-	time_buf[6]=(Read_DS1302(ds1302_sec_add)) & 0x7F;//秒 
-
-	*/
 	
 //  	pTime = time_buf;
 	/*

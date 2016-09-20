@@ -1,10 +1,10 @@
-C51 COMPILER V9.00   LED                                                                   09/19/2016 23:14:02 PAGE 1   
+C51 COMPILER V9.53.0.0   LED                                                               09/20/2016 14:39:31 PAGE 1   
 
 
-C51 COMPILER V9.00, COMPILATION OF MODULE LED
+C51 COMPILER V9.53.0.0, COMPILATION OF MODULE LED
 OBJECT MODULE PLACED IN .\out\led.obj
-COMPILER INVOKED BY: D:\Keil\C51\BIN\C51.EXE src\led.c LARGE BROWSE INCDIR(.\inc) DEBUG OBJECTEXTEND PRINT(.\list\led.ls
-                    -t) OBJECT(.\out\led.obj)
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\led.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\inc) DEBUG OBJECTEXTEN
+                    -D PRINT(.\list\led.lst) OBJECT(.\out\led.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
               {
               //      SBUF = temp;            //发送数据
               //      while(!TI);                     //等待发送完成
-C51 COMPILER V9.00   LED                                                                   09/19/2016 23:14:02 PAGE 2   
+C51 COMPILER V9.53.0.0   LED                                                               09/20/2016 14:39:31 PAGE 2   
 
               //      TI = 0;
                       UART_SendByte(temp);
@@ -126,7 +126,7 @@ line level    source
  114   1              STRC = 1;                       //上升沿锁存
  115   1              STRC = 0;                       //下降沿保持
  116   1      //      OEC = 0;                        //595使能
-C51 COMPILER V9.00   LED                                                                   09/19/2016 23:14:02 PAGE 3   
+C51 COMPILER V9.53.0.0   LED                                                               09/20/2016 14:39:31 PAGE 3   
 
  117   1      }
  118          
@@ -190,7 +190,7 @@ line level    source
  176   3                              LED_SendDataB(temp);
  177   3                              temp = _crol_(temp,1);
  178   3                              OEB = 0;
-C51 COMPILER V9.00   LED                                                                   09/19/2016 23:14:02 PAGE 4   
+C51 COMPILER V9.53.0.0   LED                                                               09/20/2016 14:39:31 PAGE 4   
 
  179   3                              delayNms(time);
  180   3                              OEB = 1;

@@ -150,6 +150,7 @@ void UART_SendByte(unsigned char sdata)
 }
 
 
+/*
 //通过串口发送一个字符串
 void UART_SendString(unsigned char *pStr)
 {
@@ -160,6 +161,7 @@ void UART_SendString(unsigned char *pStr)
 	}
 }
 	
+*/
 	
 
 #ifdef UART_USE_INT
@@ -173,6 +175,7 @@ void UART_InterruptServer(void) interrupt 4
 		RI = 0;
 		rdata = SBUF;			//接收数据
 		UART_SendByte(rdata);	//串口发送数据回显
+		MsgIn(&recMessage,rdata);
 		/*
 		if(rdata == 0xFA)
 		{
