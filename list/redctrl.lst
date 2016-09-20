@@ -1,0 +1,107 @@
+C51 COMPILER V9.53.0.0   REDCTRL                                                           09/19/2016 16:10:29 PAGE 1   
+
+
+C51 COMPILER V9.53.0.0, COMPILATION OF MODULE REDCTRL
+OBJECT MODULE PLACED IN .\out\redctrl.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\redctrl.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\inc) DEBUG OBJECTE
+                    -XTEND PRINT(.\list\redctrl.lst) OBJECT(.\out\redctrl.obj)
+
+line level    source
+
+   1          //红外遥控的控制文件
+   2          
+   3          #include "includes.h"
+   4          
+   5          sbit RED_CTRL = P3^3;
+   6          
+   7          IR_DATA IR_data;
+   8          
+   9          //红外遥控器解码程序
+  10          void decode(void) 
+  11          {
+  12   1      //      unsigned char i = 0,j,k;
+  13   1              
+  14   1              
+  15   1              
+  16   1      }
+  17          
+  18          //遥控解码
+  19          unsigned char redCodeReceice(void)
+  20          {
+  21   1              unsigned char i,j,k = 0;
+  22   1              unsigned char code_value = 0,key = 0;
+  23   1              unsigned char key_code[4] = {'\0'};
+  24   1              
+  25   1              for(i = 0 ;i < 19;i++)
+  26   1              {
+  27   2                      delayNus(400);                  
+  28   2                      if(RED_CTRL)            //9ms???????????,??????
+  29   2                      {
+  30   3                              return 0xFF;
+  31   3                      }
+  32   2              }
+  33   1              while(!RED_CTRL);               //??9ms?????
+  34   1              
+  35   1              //???????,
+  36   1              for(i = 0;i < 5;i++)
+  37   1              {
+  38   2                      delayNus(500);
+  39   2                      if(!RED_CTRL)
+  40   2                      {
+  41   3                              return 0xFF;
+  42   3                      }
+  43   2              }
+  44   1              
+  45   1              while(RED_CTRL);                //??4.5ms?????
+  46   1              
+  47   1              //?????????
+  48   1              for(i = 0; i < 4; i++)
+  49   1              {
+  50   2                      //??????8?
+  51   2                      for(j = 0; j < 8;j++)
+  52   2                      {
+  53   3                              while(!RED_CTRL);       //??????
+  54   3                              
+C51 COMPILER V9.53.0.0   REDCTRL                                                           09/19/2016 16:10:29 PAGE 2   
+
+  55   3                              while(RED_CTRL) //???????
+  56   3                              {
+  57   4                                      delayNus(100);
+  58   4                                      k++;
+  59   4                                      //??????????????
+  60   4                                      if(k >= 22)
+  61   4                                      {
+  62   5                                              return 0xFF;
+  63   5                                      }
+  64   4                              }
+  65   3                              
+  66   3                              code_value >>= 1;               //??????
+  67   3                              if( k >= 8)
+  68   3                              {
+  69   4                                      code_value |= 0x80;             //???????0.56,????1
+  70   4                              }
+  71   3                              k = 0;                  //??????
+  72   3                      }
+  73   2                      key_code[i] = code_value;               //???????
+  74   2              }
+  75   1              
+  76   1      //      key = key_Icode(key_code[2]);
+  77   1              
+  78   1      //      ledShowNumber(key,wei_table,-1,10);
+  79   1      
+  80   1              return key;
+  81   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    208    ----
+   CONSTANT SIZE    =      4    ----
+   XDATA SIZE       =      4       9
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

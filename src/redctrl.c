@@ -1,0 +1,81 @@
+//红外遥控的控制文件
+
+#include "includes.h"
+
+sbit RED_CTRL = P3^3;
+
+IR_DATA IR_data;
+
+//红外遥控器解码程序
+void decode(void) 
+{
+// 	unsigned char i = 0,j,k;
+	
+	
+	
+}
+
+//遥控解码
+unsigned char redCodeReceice(void)
+{
+	unsigned char i,j,k = 0;
+	unsigned char code_value = 0,key = 0;
+	unsigned char key_code[4] = {'\0'};
+	
+	for(i = 0 ;i < 19;i++)
+	{
+		delayNus(400);			
+		if(RED_CTRL)		//9ms???????????,??????
+		{
+			return 0xFF;
+		}
+	}
+	while(!RED_CTRL);		//??9ms?????
+	
+	//???????,
+	for(i = 0;i < 5;i++)
+	{
+		delayNus(500);
+		if(!RED_CTRL)
+		{
+			return 0xFF;
+		}
+	}
+	
+	while(RED_CTRL);		//??4.5ms?????
+	
+	//?????????
+	for(i = 0; i < 4; i++)
+	{
+		//??????8?
+		for(j = 0; j < 8;j++)
+		{
+			while(!RED_CTRL);	//??????
+			
+			while(RED_CTRL)	//???????
+			{
+				delayNus(100);
+				k++;
+				//??????????????
+				if(k >= 22)
+				{
+					return 0xFF;
+				}
+			}
+			
+			code_value >>= 1;		//??????
+			if( k >= 8)
+			{
+				code_value |= 0x80;		//???????0.56,????1
+			}
+			k = 0;			//??????
+		}
+		key_code[i] = code_value;		//???????
+	}
+	
+//	key = key_Icode(key_code[2]);
+	
+//	ledShowNumber(key,wei_table,-1,10);
+
+	return key;
+}

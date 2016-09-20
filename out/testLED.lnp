@@ -1,0 +1,12 @@
+".\out\main.obj",
+".\out\delay.obj",
+".\out\uart.obj",
+".\out\led.obj",
+".\out\ds1302.obj",
+".\out\wdt.obj",
+".\out\ds18b20.obj",
+".\out\redctrl.obj",
+".\out\test.obj",
+".\out\timer.obj" 
+TO ".\out\testLED" 
+PRINT(".\list\testLED.m51") RAMSIZE(256) 

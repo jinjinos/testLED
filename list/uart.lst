@@ -1,0 +1,243 @@
+C51 COMPILER V9.53.0.0   UART                                                              09/19/2016 16:10:28 PAGE 1   
+
+
+C51 COMPILER V9.53.0.0, COMPILATION OF MODULE UART
+OBJECT MODULE PLACED IN .\out\uart.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\uart.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\inc) DEBUG OBJECTEXTE
+                    -ND PRINT(.\list\uart.lst) OBJECT(.\out\uart.obj)
+
+line level    source
+
+   1          
+   2          //´®¿ÚÍ¨ÐÅ³ÌÐò
+   3          
+   4          #include "includes.h"
+   5          
+   6          //¶¨ÒåÒ»¸ö´®¿Ú½ÓÊÕ»º³åÇø
+   7          Message xdata recMessage;
+   8          volatile unsigned char tFlag = 0;               //ÐÞ¸Äµ±Ç°Ê±¼äµÄ±êÖ¾Î»
+   9          
+  10          //´®¿Ú½ÓÊÕÏûÏ¢¶ÓÁÐ³õÊ¼»¯
+  11          void MsgInit(Message * recMessage)
+  12          {
+  13   1              recMessage->pIn = &(recMessage->rBuffer[0]);
+  14   1              recMessage->pOut = &(recMessage->rBuffer[0]);
+  15   1              memset(recMessage->rBuffer,0,Buffer_Size);
+  16   1              recMessage->rNum = 0;
+  17   1      }
+  18          
+  19          //ÏûÏ¢Èë¶Ó
+  20          unsigned char MsgIn(Message * recMessage,char recData)
+  21          {
+  22   1              if(MsgIsFull((*recMessage)))
+  23   1              {
+  24   2      //              printf("The Msg Queue is Full,can't insert into it\r\n");
+  25   2                      return 0;
+  26   2              }
+  27   1              else
+  28   1              {
+  29   2                      *(recMessage->pIn++) = recData;
+  30   2                      if(recMessage->pIn == &(recMessage->rBuffer[Buffer_Size]))
+  31   2                      {
+  32   3                              recMessage->pIn = &(recMessage->rBuffer[0]);
+  33   3                      }
+  34   2                      recMessage->rNum++;
+  35   2                      return 1;
+  36   2              }
+  37   1      }
+  38          
+  39          //ÏûÏ¢³ö¶Ó
+  40          unsigned char MsgOut(Message * recMessage)
+  41          {
+  42   1              unsigned char MsgChar = 0;
+  43   1              
+  44   1              if(MsgIsEmpty((*recMessage)))
+  45   1              {
+  46   2                      printf("The Msg Queue is Empty,can't get out from it\r\n");
+  47   2      //              return 0;
+  48   2              }
+  49   1              else
+  50   1              {
+  51   2                      MsgChar = *(recMessage->pOut++);
+  52   2                      if(recMessage->pOut == &(recMessage->rBuffer[Buffer_Size]))
+  53   2                      {
+  54   3                              recMessage->pOut = &(recMessage->rBuffer[0]);
+C51 COMPILER V9.53.0.0   UART                                                              09/19/2016 16:10:28 PAGE 2   
+
+  55   3                      }
+  56   2                      recMessage->rNum--;
+  57   2              }
+  58   1              return MsgChar;
+  59   1      
+  60   1      }
+  61          
+  62          
+  63          #ifdef UART_IN_USE
+              
+              //´®¿Ú³õÊ¼»¯  //9600bps@18.432MHz  12T   //115200bps@18.432MHz   1T
+              //@baud ÒªÉèÖÃµÄ²¨ÌØÂÊ
+              //@foscPre ÉèÖÃÎª1T»òÕß12TÄ£Ê½
+              void UART_Init(unsigned int baud,unsigned char foscPre)
+              {
+              #ifdef USRT_USE_TIMER1          //Ê¹ÓÃ¶¨Ê±Æ÷1×÷Îª²¨ÌØÂÊ·¢ÉúÆ÷
+                      
+                      PCON &= 0x7F;           //²¨ÌØÂÊ²»¼Ó±¶
+                      SCON  = 0x50;           //0101 0000 8Î»Êý¾Ý£¬¿É±ä²¨ÌØÂÊ
+                      //AUXR²»¿ÉÎ»Ñ°Ö·
+                      if(foscPre == 1)
+                      {
+                              AUXR |= 0x40;           //T1x12 = 1£¬¶¨Ê±Æ÷Ê±ÖÓÎªFosc   ,¼´1 T          
+                      }
+                      else 
+                      {
+                              AUXR &= 0xBF;           //T1x12 = 0£¬¶¨Ê±Æ÷Ê±ÖÓÎªFosc/12,¼´12T
+                      }
+                      AUXR &= 0xFE;           //SIBRS = 0, ´®¿Ú1Ñ¡Ôñ¶¨Ê±Æ÷1Î»²¨ÌØÂÊ·¢ÉúÆ÷
+                      
+                      TMOD &= 0x0F;           //Çå³þ¶¨Ê±Æ÷1µÄÄ£Ê½Î»
+                      TMOD |= 0x20;           //ÉèÖÃ¶¨Ê±Æ÷1Îª°ËÎ»×Ô¶¯ÖØ×°Ä£Ê½
+                      
+              //      TL1   = 0xFB;           //ÉèÖÃ¶¨Ê±Æ÷³õÖµ                        2^8 - (Fosc/12/32/baud)
+                      TL1       = 256 - (Fosc/12/32/baud);
+                      
+                      TH1   = TL1;            //ÉèÖÃ¶¨Ê±Æ÷×Ô¶¯ÖØ×°Öµ
+                      
+                      ET1   = 0;                      //½ûÖ¹¶¨Ê±Æ÷1µÄÖÐ¶Ï
+                      TR1   = 1;                      //Æô¶¯¶¨Ê±Æ÷1
+                      
+              #else                                   //Ê¹ÓÃ¶ÀÁ¢²¨ÌØÂÊ·¢ÉúÆ÷
+                      
+                      PCON &= 0x7F;           //²¨ÌØÂÊ²»¼Ó±¶
+                      SCON  = 0x50;           //´®¿ÚÄ£Ê½1£,8Î»Êý¾Ý ¿É±ä²¨ÌØÂÊ
+                      
+                      if(foscPre == 1)
+                      {
+                              AUXR |= 0x04;           //BRTx12 = 1£¬¶¨Ê±Æ÷Ê±ÖÓÎªFosc   ,¼´1 T
+                      }
+                      else
+                      {
+                              AUXR &= 0xFB;           //BRTx12 = 0£¬¶¨Ê±Æ÷Ê±ÖÓÎªFosc/12,¼´12T
+                      }
+                      
+              //      BRT   = 0xFB;           //ÉèÖÃ ¶ÀÁ¢²¨ÌØÂÊ·¢ÉúÆ÷ÖØ×°Öµ
+                      BRT       = 256 - (Fosc/12/32/baud);
+                      
+                      AUXR |= 0x01;           //SIBRS = 1,´®¿Ú1Ñ¡ÔñÊ¹ÓÃ¶ÀÁ¢²¨ÌØÂÊ·¢ÉúÆ÷
+                      AUXR |= 0x10;           //BRTR = 1,Æô¶¯¶ÀÁ¢²¨ÌØÂÊ·¢ÉúÆ÷
+                      
+              #endif  
+C51 COMPILER V9.53.0.0   UART                                                              09/19/2016 16:10:28 PAGE 3   
+
+                      
+              #ifdef UART_USE_INT
+                      ES    = 1;                      //´®¿ÚÖÐ¶ÏÔÊÐí
+              //      TI = 1;                 //ÒÆÖ²printfµÄ·½·¨2
+              #else
+                      ES    = 0;
+              #endif  
+              }
+              
+              #else
+ 127          //ÉèÖÃ´®¿ÚÎª¹¤×÷·½Ê½0 TXDÊä³öÍ¬²½Âö³å£¬RXDÊä³ö´®ÐÐÊý¾Ý LSB
+ 128          void UART_Init(void)
+ 129          {
+ 130   1              SCON = 0x00;    //Í¬²½Í¨ÐÅ·½Ê½£¬TXDÊä³öÍ¬²½Âö³å£¬RXDÊä³ö´®ÐÐÊý¾Ý
+ 131   1              //ÉèÖÃ´®¿ÚÄ£Ê½0 Îª12·ÖÆµ
+ 132   1              AUXR &= ~(1 << 5);              //UART_M0x6 = 0;
+ 133   1              //ÉèÖÃ´®¿ÚÄ£Ê½0 Îª2·ÖÆµ
+ 134   1      //      AUXR |= (1 << 5);
+ 135   1      }
+ 136          
+ 137          #endif
+ 138          
+ 139          
+ 140          
+ 141          
+ 142          
+ 143          
+ 144          //Í¨¹ý´®¿Ú·¢ËÍÒ»¸ö×Ö½ÚµÄÊý¾Ý
+ 145          void UART_SendByte(unsigned char sdata)
+ 146          {
+ 147   1              SBUF = sdata;
+ 148   1              while(!TI);             //µÈ´ý·¢ËÍÍê³É
+ 149   1              TI = 0;                 //Çå·¢ËÍÍê³É±êÖ¾Î»
+ 150   1      }
+ 151          
+ 152          
+ 153          //Í¨¹ý´®¿Ú·¢ËÍÒ»¸ö×Ö·û´®
+ 154          void UART_SendString(unsigned char *pStr)
+ 155          {
+ 156   1              while(*pStr != '\0')
+ 157   1              {
+ 158   2                      UART_SendByte(*pStr);
+ 159   2                      pStr++;
+ 160   2              }
+ 161   1      }
+ 162                  
+ 163                  
+ 164          
+ 165          #ifdef UART_USE_INT
+ 166          //´®¿ÚÖÐ¶Ï·þÎñº¯Êý //TIºÍRIÐèÈí¼þÇåÁã
+ 167          void UART_InterruptServer(void) interrupt 4
+ 168          {
+ 169   1              unsigned char rdata = 0x00;
+ 170   1              if(RI)
+ 171   1              {
+ 172   2                      //Çå½ÓÊÕÖÐ¶Ï±êÖ¾Î»
+ 173   2                      RI = 0;
+ 174   2                      rdata = SBUF;                   //½ÓÊÕÊý¾Ý
+ 175   2                      
+ 176   2                      if(rdata == 0xFA)
+ 177   2                      {
+ 178   3                              tFlag = 1;
+C51 COMPILER V9.53.0.0   UART                                                              09/19/2016 16:10:28 PAGE 4   
+
+ 179   3                      }
+ 180   2                      else if(rdata == 0xFF)
+ 181   2                      {
+ 182   3                              tFlag = 2;
+ 183   3                      }
+ 184   2                      else if(rdata == 0xFB)
+ 185   2                      {
+ 186   3                              tFlag = 3;
+ 187   3                      }
+ 188   2                      else
+ 189   2                      {
+ 190   3                              MsgIn(&recMessage,rdata);
+ 191   3                              UART_SendByte(rdata);   //´®¿Ú·¢ËÍÊý¾Ý»ØÏÔ
+ 192   3                      }
+ 193   2      
+ 194   2              }
+ 195   1              else    // if(TI)
+ 196   1              {
+ 197   2                      //Çå·¢ËÍÖÐ¶Ï±êÖ¾Î»
+ 198   2                      TI = 0;                 //ÒÆÖ²printfµÄ·½·¨2
+ 199   2              }
+ 200   1      }
+ 201          #endif
+ 202          
+ 203          
+ 204          
+ 205          //´®¿ÚÒÆÖ²printf ·½·¨1
+ 206          char putchar (char ch)
+ 207          {
+ 208   1              UART_SendByte(ch);
+ 209   1              return ch;
+ 210   1      }
+ 211          
+ 212          
+ 213          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    649    ----
+   CONSTANT SIZE    =     47    ----
+   XDATA SIZE       =     72      10
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

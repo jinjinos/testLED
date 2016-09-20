@@ -1,0 +1,146 @@
+C51 COMPILER V9.53.0.0   DS18B20                                                           09/19/2016 16:10:29 PAGE 1   
+
+
+C51 COMPILER V9.53.0.0, COMPILATION OF MODULE DS18B20
+OBJECT MODULE PLACED IN .\out\ds18b20.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\ds18b20.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\inc) DEBUG OBJECTE
+                    -XTEND PRINT(.\list\ds18b20.lst) OBJECT(.\out\ds18b20.obj)
+
+line level    source
+
+   1          
+   2          //单总线DS18B20的驱动程序
+   3          #include "includes.h"
+   4          
+   5          sbit DQ = P4^0;         //18B20与单片机的连接管脚
+   6          
+   7          
+   8          //DS18B20复位，初始化。检测是否存在
+   9          //存在返回1，否则返回0
+  10          bit ds18b20_Init(void)
+  11          {
+  12   1              unsigned char i = 0;
+  13   1              
+  14   1              //拉低总线并保持480us以上，发送复位脉冲
+  15   1              DQ = 0;
+  16   1              Delay(500);
+  17   1              DQ = 1;
+  18   1              //60us之后接收DS18B20存在脉冲
+  19   1              Delay(50);
+  20   1              i = DQ;         //读取60-240us的存在脉冲
+  21   1              Delay(450);     //延时450us,接收保持大于480us
+  22   1              
+  23   1              if(DQ)
+  24   1                      return 0;               //DQ为高则没有存在脉冲
+  25   1              else
+  26   1                      return 1;               
+  27   1      }
+  28          
+  29          //从DS18B20中读取一个字节
+  30          unsigned char DS18B20_ReadByte(void)
+  31          {
+  32   1              unsigned char i = 0;
+  33   1              unsigned char dat = 0;
+  34   1              
+  35   1              for(i = 0;i < 8;i++)
+  36   1              {
+  37   2                      dat >>= 1;              //值右移一位，方便接收下一位数据
+  38   2                      
+  39   2                      DQ = 0;                 //发送读时序
+  40   2                      Delay(4);
+  41   2                      DQ = 1;
+  42   2                      
+  43   2                      Delay(10);      //延时10us之后读取电平
+  44   2                      
+  45   2                      if(DQ)
+  46   2                      {
+  47   3                              dat |= 0x80;    
+  48   3                      }
+  49   2                      Delay(60);
+  50   2              }
+  51   1              
+  52   1              return dat;
+  53   1      }
+  54          
+C51 COMPILER V9.53.0.0   DS18B20                                                           09/19/2016 16:10:29 PAGE 2   
+
+  55          
+  56          //向DS18B20中写入一个字节的数据
+  57          void DS18B20_WriteByte(unsigned char dat)
+  58          {
+  59   1              unsigned char i = 0;
+  60   1              
+  61   1              for(i = 0;i < 8;i++)
+  62   1              {
+  63   2                      DQ = 0;
+  64   2                      Delay(4);
+  65   2                      
+  66   2                      DQ = dat & 0x01;
+  67   2                      
+  68   2                      Delay(50);
+  69   2                      
+  70   2                      DQ = 1;
+  71   2                      dat >>= 1;
+  72   2              }
+  73   1      }
+  74          
+  75          
+  76          //从DS18B20中读取数据并转换 0x44命令
+  77          unsigned int DS18B20_ReadTemp(void)
+  78          {
+  79   1              unsigned char temp_H,temp_L;
+  80   1              unsigned int temp , i;
+  81   1              
+  82   1              //启动温度转换
+  83   1              ds18b20_Init();         //DS18B20初始化
+  84   1              DS18B20_WriteByte(0xcc);//*跳过读序列号*/
+  85   1              DS18B20_WriteByte(0x44);//*启动温度转换*/
+  86   1              Delay(10);
+  87   1              
+  88   1              ds18b20_Init();
+  89   1              DS18B20_WriteByte(0xCC);//*跳过读序列号*/ 
+  90   1              DS18B20_WriteByte(0xBE);//*读取温度*/ 
+  91   1              
+  92   1              temp_L = DS18B20_ReadByte();                    //低字节
+  93   1              temp_H = DS18B20_ReadByte();                    //高字节
+  94   1              for(i=0;i<7;i++)
+  95   1                      DS18B20_ReadByte();
+  96   1              
+  97   1              temp = (unsigned int)(temp_H & 0x00FF);
+  98   1              
+  99   1              temp = (temp << 8) | temp_L;
+ 100   1      
+ 101   1      /*      
+ 102   1              if(temp < 0x0FFF)
+ 103   1                      tFlag = 0;              //正负标志位为正
+ 104   1              else
+ 105   1              {
+ 106   1                      tFlag = 1;
+ 107   1                      temp = ~temp + 1;       //取反加1;
+ 108   1              }
+ 109   1      */      
+ 110   1              //不是乘以0.0625是为了把小数点后一位数据也转换为可以显示的数据，保留一位小数
+ 111   1              temp = temp * 0.625;            //温度为29.5 temp = 295
+ 112   1              return temp;
+ 113   1      }
+ 114          
+ 115          
+ 116          
+C51 COMPILER V9.53.0.0   DS18B20                                                           09/19/2016 16:10:29 PAGE 3   
+
+ 117          
+ 118          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    286    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       9
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
