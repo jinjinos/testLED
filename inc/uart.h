@@ -34,9 +34,9 @@ extern void UART_Init();
 #endif
 
 extern Message xdata recMessage; 
-extern void MsgInit(Message * recMessage);
-extern unsigned char MsgIn(Message * recMessage,char recData);
-extern unsigned char MsgOut(Message * recMessage);
+extern void MsgInit(void);
+extern unsigned char MsgIn(char recData);
+extern unsigned char MsgOut(void);
 
 //串口输入时间完成的标识
 extern volatile unsigned char tFlag;

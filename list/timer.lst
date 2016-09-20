@@ -1,4 +1,4 @@
-C51 COMPILER V9.53.0.0   TIMER                                                             09/20/2016 14:39:32 PAGE 1   
+C51 COMPILER V9.53.0.0   TIMER                                                             09/20/2016 17:30:36 PAGE 1   
 
 
 C51 COMPILER V9.53.0.0, COMPILATION OF MODULE TIMER
@@ -62,7 +62,7 @@ line level    source
   52   1              TMOD |= 0x20;           //设置定时器1为工作模式2
   53   1              TL1= Timer1_L;          //设置定时器初始值
   54   1              TH1 = TL1;                      //设置定时器重装初始值
-C51 COMPILER V9.53.0.0   TIMER                                                             09/20/2016 14:39:32 PAGE 2   
+C51 COMPILER V9.53.0.0   TIMER                                                             09/20/2016 17:30:36 PAGE 2   
 
   55   1              TF1 = 0;                        //清除TF1中断标志
   56   1              ET1 = 1;                        //允许定时器1的溢出中断

@@ -1,7 +1,8 @@
 //测试旋转功能
-
+//采用中断的方法 消除盲点
 #include "includes.h"
 
+bit BIT_timeout=0; 	
 
 //PCtoLCD2002 阳码 顺向 逐列式 点阵16
 
@@ -44,6 +45,25 @@ unsigned char code love[] = {
 
 
 
+
+/*********延时子程序**********/
+static void delay(unsigned char n)	//每列显示的时间
+{
+	unsigned char a,b;
+	for(;n>0;n--)
+	{    	
+		for(b=165;b>0;b--)
+        for(a=4;a>0;a--);
+	}
+}
+
+//外部中断0的中断服务函数  P32 对应红外起点检测信号
+void INT0_Server(void) interrupt 0
+{
+	BIT_timeout = 1;		//每一圈的起点标志位
+}
+
+
 void LED_GO(void)
 {
 	unsigned int i = 0,j = 0;
@@ -51,6 +71,35 @@ void LED_GO(void)
 	
 	while(1)
 	{
+		if(BIT_timeout)		//起点判断
+		{
+			BIT_timeout = 0;
+			
+			if(++j > 800)			//定义显示的字数为 800 / 16 = 50
+			{
+				j = 0;			//显示完80个字后重新开始显示
+			}
+			
+			for(i = j;i < 160 + j; i++) 	//平面显示一列 160/16=10 一个圆同时显示10个字
+			{
+				LED_SendDataC(love[i*2]);
+				LED_SendDataB(love[i*2+1]);
+//				LED_SendDataC(love[(i*2) % sizeof(love)]);
+//				LED_SendDataB(love[(i*2+1) % sizeof(love)]);
+				OEB = OEC = 0;
+				delay(1);
+				OEB = OEC = 1;
+				if(BIT_timeout)
+				{
+					//如果没有显示完一圈的数据 回到起点了
+					//直接跳出 就不会出现头吃尾的现象 而且盲点很小
+					break;
+				}
+			}
+		}
+		
+		
+/*		
 		if(KEY == 0)	//红外接收管，判断起始位
 		{
 			j++;
@@ -71,6 +120,7 @@ void LED_GO(void)
 			}
 			
 		}
+*/
 	}
 	
 }

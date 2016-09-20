@@ -13,7 +13,7 @@
 // #include <stddef.h>
 // #include <stdarg.h>
 
-
+#include "task.h"
 #include "led.h"
 #include "delay.h"
 #include "uart.h"
@@ -21,6 +21,8 @@
 #include "ds18b20.h"
 #include "timer.h"
 #include "redctrl.h"
+#include "eeprom.h"
+
 
 #include "wdt.h"
 

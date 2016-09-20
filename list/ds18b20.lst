@@ -1,4 +1,4 @@
-C51 COMPILER V9.53.0.0   DS18B20                                                           09/20/2016 14:39:31 PAGE 1   
+C51 COMPILER V9.53.0.0   DS18B20                                                           09/20/2016 17:30:35 PAGE 1   
 
 
 C51 COMPILER V9.53.0.0, COMPILATION OF MODULE DS18B20
@@ -62,7 +62,7 @@ line level    source
   52   1              return dat;
   53   1      }
   54          
-C51 COMPILER V9.53.0.0   DS18B20                                                           09/20/2016 14:39:31 PAGE 2   
+C51 COMPILER V9.53.0.0   DS18B20                                                           09/20/2016 17:30:35 PAGE 2   
 
   55          
   56          //向DS18B20中写入一个字节的数据
@@ -126,7 +126,7 @@ line level    source
  114          
  115          
  116          
-C51 COMPILER V9.53.0.0   DS18B20                                                           09/20/2016 14:39:31 PAGE 3   
+C51 COMPILER V9.53.0.0   DS18B20                                                           09/20/2016 17:30:35 PAGE 3   
 
  117          
  118          

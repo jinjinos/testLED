@@ -8,52 +8,52 @@ Message xdata recMessage;
 volatile unsigned char tFlag = 0;		//修改当前时间的标志位
 
 //串口接收消息队列初始化
-void MsgInit(Message * recMessage)
+void MsgInit(void)
 {
-	recMessage->pIn = &(recMessage->rBuffer[0]);
-	recMessage->pOut = &(recMessage->rBuffer[0]);
-	memset(recMessage->rBuffer,0,Buffer_Size);
-	recMessage->rNum = 0;
+	recMessage.pIn = &(recMessage.rBuffer[0]);
+	recMessage.pOut = &(recMessage.rBuffer[0]);
+	memset(recMessage.rBuffer,0,Buffer_Size);
+	recMessage.rNum = 0;
 }
 
 //消息入队
-unsigned char MsgIn(Message * recMessage,char recData)
+unsigned char MsgIn(char recData)
 {
-	if(MsgIsFull((*recMessage)))
+	if(MsgIsFull(recMessage))
 	{
 // 		printf("The Msg Queue is Full,can't insert into it\r\n");
 		return 0;
 	}
 	else
 	{
-		*(recMessage->pIn++) = recData;
-		if(recMessage->pIn == &(recMessage->rBuffer[Buffer_Size]))
+		*(recMessage.pIn++) = recData;
+		if(recMessage.pIn == &(recMessage.rBuffer[Buffer_Size]))
 		{
-			recMessage->pIn = &(recMessage->rBuffer[0]);
+			recMessage.pIn = &(recMessage.rBuffer[0]);
 		}
-		recMessage->rNum++;
+		recMessage.rNum++;
 		return 1;
 	}
 }
 
 //消息出队
-unsigned char MsgOut(Message * recMessage)
+unsigned char MsgOut(void)
 {
 	unsigned char MsgChar = 0;
 	
-	if(MsgIsEmpty((*recMessage)))
+	if(MsgIsEmpty(recMessage))
 	{
 		printf("The Msg Queue is Empty,can't get out from it\r\n");
 // 		return 0;
 	}
 	else
 	{
-		MsgChar = *(recMessage->pOut++);
-		if(recMessage->pOut == &(recMessage->rBuffer[Buffer_Size]))
+		MsgChar = *(recMessage.pOut++);
+		if(recMessage.pOut == &(recMessage.rBuffer[Buffer_Size]))
 		{
-			recMessage->pOut = &(recMessage->rBuffer[0]);
+			recMessage.pOut = &(recMessage.rBuffer[0]);
 		}
-		recMessage->rNum--;
+		recMessage.rNum--;
 	}
 	return MsgChar;
 
@@ -129,9 +129,9 @@ void UART_Init(void)
 {
 	SCON = 0x00;	//同步通信方式，TXD输出同步脉冲，RXD输出串行数据
 	//设置串口模式0 为12分频
-	AUXR &= ~(1 << 5);		//UART_M0x6 = 0;
+//	AUXR &= ~(1 << 5);		//UART_M0x6 = 0;
 	//设置串口模式0 为2分频
-// 	AUXR |= (1 << 5);
+ 	AUXR |= (1 << 5);
 }
 
 #endif
@@ -175,7 +175,7 @@ void UART_InterruptServer(void) interrupt 4
 		RI = 0;
 		rdata = SBUF;			//接收数据
 		UART_SendByte(rdata);	//串口发送数据回显
-		MsgIn(&recMessage,rdata);
+		MsgIn(rdata);
 		/*
 		if(rdata == 0xFA)
 		{

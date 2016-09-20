@@ -11,11 +11,16 @@ void SystemInit(void)
 {
 	
 	//串口接收缓冲区初始化
-	MsgInit(&recMessage);
+	MsgInit();
 	
-#ifdef EN_OS_INT1
-	IT1 = 1;	//外部中断为边沿触发
-	EX1 = 1;	//允许外部中断
+#ifdef EN_OS_INT0  	//外部中断0初始化
+	IT0 = 1;		//外部中断为边沿触发
+	EX0 = 1;		//允许外部中断0
+#endif	
+	
+#ifdef EN_OS_INT1	//外部中断1初始化
+	IT1 = 1;		//外部中断为边沿触发
+	EX1 = 1;		//允许外部中断1
 #endif	
 	
 	

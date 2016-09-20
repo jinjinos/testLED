@@ -40,7 +40,7 @@ void delayNms(unsigned int N)
 	}
 }
 
-
+/*
 void delayNus(unsigned int N)
 {
 	while(N--)
@@ -48,7 +48,7 @@ void delayNus(unsigned int N)
 // 		Delay1us();
 	}
 }
-
+*/
 
 
 /*

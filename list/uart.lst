@@ -1,4 +1,4 @@
-C51 COMPILER V9.53.0.0   UART                                                              09/20/2016 14:39:31 PAGE 1   
+C51 COMPILER V9.53.0.0   UART                                                              09/20/2016 17:30:35 PAGE 1   
 
 
 C51 COMPILER V9.53.0.0, COMPILATION OF MODULE UART
@@ -18,54 +18,54 @@ line level    source
    8          volatile unsigned char tFlag = 0;               //修改当前时间的标志位
    9          
   10          //串口接收消息队列初始化
-  11          void MsgInit(Message * recMessage)
+  11          void MsgInit(void)
   12          {
-  13   1              recMessage->pIn = &(recMessage->rBuffer[0]);
-  14   1              recMessage->pOut = &(recMessage->rBuffer[0]);
-  15   1              memset(recMessage->rBuffer,0,Buffer_Size);
-  16   1              recMessage->rNum = 0;
+  13   1              recMessage.pIn = &(recMessage.rBuffer[0]);
+  14   1              recMessage.pOut = &(recMessage.rBuffer[0]);
+  15   1              memset(recMessage.rBuffer,0,Buffer_Size);
+  16   1              recMessage.rNum = 0;
   17   1      }
   18          
   19          //消息入队
-  20          unsigned char MsgIn(Message * recMessage,char recData)
+  20          unsigned char MsgIn(char recData)
   21          {
-  22   1              if(MsgIsFull((*recMessage)))
+  22   1              if(MsgIsFull(recMessage))
   23   1              {
   24   2      //              printf("The Msg Queue is Full,can't insert into it\r\n");
   25   2                      return 0;
   26   2              }
   27   1              else
   28   1              {
-  29   2                      *(recMessage->pIn++) = recData;
-  30   2                      if(recMessage->pIn == &(recMessage->rBuffer[Buffer_Size]))
+  29   2                      *(recMessage.pIn++) = recData;
+  30   2                      if(recMessage.pIn == &(recMessage.rBuffer[Buffer_Size]))
   31   2                      {
-  32   3                              recMessage->pIn = &(recMessage->rBuffer[0]);
+  32   3                              recMessage.pIn = &(recMessage.rBuffer[0]);
   33   3                      }
-  34   2                      recMessage->rNum++;
+  34   2                      recMessage.rNum++;
   35   2                      return 1;
   36   2              }
   37   1      }
   38          
   39          //消息出队
-  40          unsigned char MsgOut(Message * recMessage)
+  40          unsigned char MsgOut(void)
   41          {
   42   1              unsigned char MsgChar = 0;
   43   1              
-  44   1              if(MsgIsEmpty((*recMessage)))
+  44   1              if(MsgIsEmpty(recMessage))
   45   1              {
   46   2                      printf("The Msg Queue is Empty,can't get out from it\r\n");
   47   2      //              return 0;
   48   2              }
   49   1              else
   50   1              {
-  51   2                      MsgChar = *(recMessage->pOut++);
-  52   2                      if(recMessage->pOut == &(recMessage->rBuffer[Buffer_Size]))
+  51   2                      MsgChar = *(recMessage.pOut++);
+  52   2                      if(recMessage.pOut == &(recMessage.rBuffer[Buffer_Size]))
   53   2                      {
-  54   3                              recMessage->pOut = &(recMessage->rBuffer[0]);
-C51 COMPILER V9.53.0.0   UART                                                              09/20/2016 14:39:31 PAGE 2   
+  54   3                              recMessage.pOut = &(recMessage.rBuffer[0]);
+C51 COMPILER V9.53.0.0   UART                                                              09/20/2016 17:30:35 PAGE 2   
 
   55   3                      }
-  56   2                      recMessage->rNum--;
+  56   2                      recMessage.rNum--;
   57   2              }
   58   1              return MsgChar;
   59   1      
@@ -126,7 +126,7 @@ line level    source
  114   1              AUXR |= 0x10;           //BRTR = 1,启动独立波特率发生器
  115   1              
  116   1      #endif  
-C51 COMPILER V9.53.0.0   UART                                                              09/20/2016 14:39:31 PAGE 3   
+C51 COMPILER V9.53.0.0   UART                                                              09/20/2016 17:30:35 PAGE 3   
 
  117   1              
  118   1      #ifdef UART_USE_INT
@@ -143,9 +143,9 @@ line level    source
               {
                       SCON = 0x00;    //同步通信方式，TXD输出同步脉冲，RXD输出串行数据
                       //设置串口模式0 为12分频
-                      AUXR &= ~(1 << 5);              //UART_M0x6 = 0;
+              //      AUXR &= ~(1 << 5);              //UART_M0x6 = 0;
                       //设置串口模式0 为2分频
-              //      AUXR |= (1 << 5);
+                      AUXR |= (1 << 5);
               }
               
               #endif
@@ -189,8 +189,8 @@ line level    source
  175   2                      RI = 0;
  176   2                      rdata = SBUF;                   //接收数据
  177   2                      UART_SendByte(rdata);   //串口发送数据回显
- 178   2                      MsgIn(&recMessage,rdata);
-C51 COMPILER V9.53.0.0   UART                                                              09/20/2016 14:39:31 PAGE 4   
+ 178   2                      MsgIn(rdata);
+C51 COMPILER V9.53.0.0   UART                                                              09/20/2016 17:30:35 PAGE 4   
 
  179   2                      /*
  180   2                      if(rdata == 0xFA)
@@ -234,9 +234,9 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    635    ----
+   CODE SIZE        =    380    ----
    CONSTANT SIZE    =     47    ----
-   XDATA SIZE       =     72      10
+   XDATA SIZE       =     72       1
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

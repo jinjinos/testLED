@@ -1,4 +1,4 @@
-C51 COMPILER V9.53.0.0   DS1302                                                            09/20/2016 14:39:31 PAGE 1   
+C51 COMPILER V9.53.0.0   DS1302                                                            09/20/2016 17:30:35 PAGE 1   
 
 
 C51 COMPILER V9.53.0.0, COMPILATION OF MODULE DS1302
@@ -62,7 +62,7 @@ line level    source
   52   2                      T_CLK_SET;                      //时钟脉冲
   53   2                      T_CLK_CLR;
   54   2                      sdata >>= 1;
-C51 COMPILER V9.53.0.0   DS1302                                                            09/20/2016 14:39:31 PAGE 2   
+C51 COMPILER V9.53.0.0   DS1302                                                            09/20/2016 17:30:35 PAGE 2   
 
   55   2              }
   56   1              
@@ -126,7 +126,7 @@ line level    source
  114   1              return sdata;
  115   1      }
  116          
-C51 COMPILER V9.53.0.0   DS1302                                                            09/20/2016 14:39:31 PAGE 3   
+C51 COMPILER V9.53.0.0   DS1302                                                            09/20/2016 17:30:35 PAGE 3   
 
  117          
  118          //向DS1302写入时间
@@ -190,7 +190,7 @@ line level    source
  176          
  177          //DS1302测试程序
  178          void TestDS1302(void)
-C51 COMPILER V9.53.0.0   DS1302                                                            09/20/2016 14:39:31 PAGE 4   
+C51 COMPILER V9.53.0.0   DS1302                                                            09/20/2016 17:30:35 PAGE 4   
 
  179          {
  180   1              unsigned char time_buf[7] = {'\0'};
@@ -206,7 +206,7 @@ line level    source
  190   3                                      {
  191   4                                              for(i = 0; i < recMessage.rNum;i++)
  192   4                                              {
- 193   5                                                      time_buf[i] = MsgOut(&recMessage);
+ 193   5                                                      time_buf[i] = MsgOut();
  194   5                                              }
  195   4                                              DS1302_Write_Time(time_buf);
  196   4                                              printf("Write Time to DS1302 successed\r\n");
@@ -224,7 +224,7 @@ line level    source
  207   3                                      tFlag = 0;
  208   3                                      for(i = 0; i < recMessage.rNum ;i++)
  209   3                                      {
- 210   4                                              MsgOut(&recMessage);
+ 210   4                                              MsgOut();
  211   4                                      }
  212   3                                      if(MsgIsEmpty(recMessage))
  213   3                                      {
@@ -254,7 +254,7 @@ line level    source
  237          
  238          
  239          
-C51 COMPILER V9.53.0.0   DS1302                                                            09/20/2016 14:39:31 PAGE 5   
+C51 COMPILER V9.53.0.0   DS1302                                                            09/20/2016 17:30:35 PAGE 5   
 
  240          
  241          
@@ -281,7 +281,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    619    ----
+   CODE SIZE        =    607    ----
    CONSTANT SIZE    =    142    ----
    XDATA SIZE       =   ----      23
    PDATA SIZE       =   ----    ----

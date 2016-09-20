@@ -6,7 +6,9 @@
 ".\out\wdt.obj",
 ".\out\ds18b20.obj",
 ".\out\redctrl.obj",
-".\out\test.obj",
-".\out\timer.obj" 
+".\out\timer.obj",
+".\out\task.obj",
+".\out\text.obj",
+".\out\eeprom.obj" 
 TO ".\out\testLED" 
 PRINT(".\list\testLED.m51") RAMSIZE(256) 

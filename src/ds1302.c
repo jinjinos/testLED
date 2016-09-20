@@ -190,7 +190,7 @@ void TestDS1302(void)
 				{
 					for(i = 0; i < recMessage.rNum;i++)
 					{
-						time_buf[i] = MsgOut(&recMessage);
+						time_buf[i] = MsgOut();
 					}
 					DS1302_Write_Time(time_buf);
 					printf("Write Time to DS1302 successed\r\n");
@@ -207,7 +207,7 @@ void TestDS1302(void)
 				tFlag = 0;
 				for(i = 0; i < recMessage.rNum ;i++)
 				{
-					MsgOut(&recMessage);
+					MsgOut();
 				}
 				if(MsgIsEmpty(recMessage))
 				{

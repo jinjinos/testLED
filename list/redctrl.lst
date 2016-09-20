@@ -1,4 +1,4 @@
-C51 COMPILER V9.53.0.0   REDCTRL                                                           09/20/2016 14:39:32 PAGE 1   
+C51 COMPILER V9.53.0.0   REDCTRL                                                           09/20/2016 17:30:36 PAGE 1   
 
 
 C51 COMPILER V9.53.0.0, COMPILATION OF MODULE REDCTRL
@@ -62,7 +62,7 @@ line level    source
   52   1              else
   53   1              {
   54   2                      key_code = 0xFF;        /**非本机遥控器或数据错误**/
-C51 COMPILER V9.53.0.0   REDCTRL                                                           09/20/2016 14:39:32 PAGE 2   
+C51 COMPILER V9.53.0.0   REDCTRL                                                           09/20/2016 17:30:36 PAGE 2   
 
   55   2              }
   56   1              
@@ -126,7 +126,7 @@ line level    source
  114          unsigned char redCodeReceice(void)
  115          {
  116                  unsigned char i,j,k = 0;
-C51 COMPILER V9.53.0.0   REDCTRL                                                           09/20/2016 14:39:32 PAGE 3   
+C51 COMPILER V9.53.0.0   REDCTRL                                                           09/20/2016 17:30:36 PAGE 3   
 
  117                  unsigned char code_value = 0,key = 0;
  118                  unsigned char key_code[4] = {'\0'};
@@ -190,7 +190,7 @@ line level    source
  176          */
 
 
-C51 COMPILER V9.53.0.0   REDCTRL                                                           09/20/2016 14:39:32 PAGE 4   
+C51 COMPILER V9.53.0.0   REDCTRL                                                           09/20/2016 17:30:36 PAGE 4   
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =    334    ----
