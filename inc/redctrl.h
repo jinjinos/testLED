@@ -11,7 +11,7 @@ typedef struct tagIR_data
 	unsigned char data2;
 }IR_DATA;
 
-
+#define EN_OS_INT1
 
 //ºìÍâÒ£¿Ø¼üÖµ
 #define KEY_0		0x16
@@ -26,23 +26,27 @@ typedef struct tagIR_data
 #define KEY_9   	0x4A
 #define KEY_100		0x19
 #define KEY_200 	0x0D
-
 #define KEY_SUB		0x07
 #define KEY_ADD		0x15
 #define KEY_EQ		0x09
 #define KEY_LEFT	0x44
 #define KEY_RIGHT	0x40
 #define KEY_STOP	0x43
-
 #define KEY_CH		0x46
 #define KEY_CH0		0x45
 #define KEY_CH1		0x47
 
+#define GTime 53                
+#define CTime 114   
+#define D0MinTime 4  
+#define D0MaxTime 9  
+#define D1MinTime 11  
+#define D1MaxTime 16  
+#define TimeOut_cnt		250
 
-
-
-
-
+extern bit TimeOut;
+extern unsigned char key_code;
+extern unsigned char redCodeReceice(void);
 
 
 

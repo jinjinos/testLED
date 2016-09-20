@@ -172,7 +172,8 @@ void UART_InterruptServer(void) interrupt 4
 		//清接收中断标志位
 		RI = 0;
 		rdata = SBUF;			//接收数据
-		
+		UART_SendByte(rdata);	//串口发送数据回显
+		/*
 		if(rdata == 0xFA)
 		{
 			tFlag = 1;
@@ -190,7 +191,7 @@ void UART_InterruptServer(void) interrupt 4
 			MsgIn(&recMessage,rdata);
 			UART_SendByte(rdata);	//串口发送数据回显
 		}
-
+*/
 	}
 	else	// if(TI)
 	{

@@ -37,11 +37,13 @@ void Timer0IntServer(void) interrupt 1
 //如果串口不使用定时器1 就做为八位自动重装定时器使用
 #ifndef USRT_USE_TIMER1 
 
-//定时器1 模式2 100us 18.432MHz 12T
-unsigned char Timer1_H = 0x66;
-unsigned char Timer1_L = 0x66;
+//定时器1 模式2 166.67us 18.432MHz 12T
+unsigned char Timer1_H = 0x00;
+unsigned char Timer1_L = 0x00;
 
-volatile unsigned int T_Count1 = 0;
+// volatile unsigned int T_Count1 = 0;
+volatile unsigned char T1_CNT;
+unsigned char T1_CNT_bk;
 
 void Timer1Init(void)
 {
@@ -53,16 +55,15 @@ void Timer1Init(void)
 	TF1 = 0;			//清除TF1中断标志
 	ET1 = 1;			//允许定时器1的溢出中断
 	
-	TR1 = 1;			//定时器1开始计数
+	TR1 = 0;			//定时器1停止计数
 }
 
 //定时器1的中断服务函数
-void Timer_Routine(void) interrupt 3
+void Timer_Routine(void) interrupt 3 using 2
 {
-	if(T_Count1++ == 5000)
+	if(T1_CNT++ > TimeOut_cnt)
 	{
-		T_Count1 = 0;
-		LED33 = !LED33;
+		TimeOut = 1;
 	}
 }
 

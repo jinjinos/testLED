@@ -1,10 +1,10 @@
-C51 COMPILER V9.53.0.0   UART                                                              09/19/2016 16:10:28 PAGE 1   
+C51 COMPILER V9.00   UART                                                                  09/19/2016 23:14:02 PAGE 1   
 
 
-C51 COMPILER V9.53.0.0, COMPILATION OF MODULE UART
+C51 COMPILER V9.00, COMPILATION OF MODULE UART
 OBJECT MODULE PLACED IN .\out\uart.obj
-COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\uart.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\inc) DEBUG OBJECTEXTE
-                    -ND PRINT(.\list\uart.lst) OBJECT(.\out\uart.obj)
+COMPILER INVOKED BY: D:\Keil\C51\BIN\C51.EXE src\uart.c LARGE BROWSE INCDIR(.\inc) DEBUG OBJECTEXTEND PRINT(.\list\uart.
+                    -lst) OBJECT(.\out\uart.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
   52   2                      if(recMessage->pOut == &(recMessage->rBuffer[Buffer_Size]))
   53   2                      {
   54   3                              recMessage->pOut = &(recMessage->rBuffer[0]);
-C51 COMPILER V9.53.0.0   UART                                                              09/19/2016 16:10:28 PAGE 2   
+C51 COMPILER V9.00   UART                                                                  09/19/2016 23:14:02 PAGE 2   
 
   55   3                      }
   56   2                      recMessage->rNum--;
@@ -73,13 +73,13 @@ line level    source
   61          
   62          
   63          #ifdef UART_IN_USE
-              
-              //´®¿Ú³õÊ¼»¯  //9600bps@18.432MHz  12T   //115200bps@18.432MHz   1T
-              //@baud ÒªÉèÖÃµÄ²¨ÌØÂÊ
-              //@foscPre ÉèÖÃÎª1T»òÕß12TÄ£Ê½
-              void UART_Init(unsigned int baud,unsigned char foscPre)
-              {
-              #ifdef USRT_USE_TIMER1          //Ê¹ÓÃ¶¨Ê±Æ÷1×÷Îª²¨ÌØÂÊ·¢ÉúÆ÷
+  64          
+  65          //´®¿Ú³õÊ¼»¯  //9600bps@18.432MHz  12T   //115200bps@18.432MHz   1T
+  66          //@baud ÒªÉèÖÃµÄ²¨ÌØÂÊ
+  67          //@foscPre ÉèÖÃÎª1T»òÕß12TÄ£Ê½
+  68          void UART_Init(unsigned int baud,unsigned char foscPre)
+  69          {
+  70   1      #ifdef USRT_USE_TIMER1          //Ê¹ÓÃ¶¨Ê±Æ÷1×÷Îª²¨ÌØÂÊ·¢ÉúÆ÷
                       
                       PCON &= 0x7F;           //²¨ÌØÂÊ²»¼Ó±¶
                       SCON  = 0x50;           //0101 0000 8Î»Êý¾Ý£¬¿É±ä²¨ÌØÂÊ
@@ -106,49 +106,49 @@ line level    source
                       TR1   = 1;                      //Æô¶¯¶¨Ê±Æ÷1
                       
               #else                                   //Ê¹ÓÃ¶ÀÁ¢²¨ÌØÂÊ·¢ÉúÆ÷
-                      
-                      PCON &= 0x7F;           //²¨ÌØÂÊ²»¼Ó±¶
-                      SCON  = 0x50;           //´®¿ÚÄ£Ê½1£,8Î»Êý¾Ý ¿É±ä²¨ÌØÂÊ
-                      
-                      if(foscPre == 1)
-                      {
-                              AUXR |= 0x04;           //BRTx12 = 1£¬¶¨Ê±Æ÷Ê±ÖÓÎªFosc   ,¼´1 T
-                      }
-                      else
-                      {
-                              AUXR &= 0xFB;           //BRTx12 = 0£¬¶¨Ê±Æ÷Ê±ÖÓÎªFosc/12,¼´12T
-                      }
-                      
-              //      BRT   = 0xFB;           //ÉèÖÃ ¶ÀÁ¢²¨ÌØÂÊ·¢ÉúÆ÷ÖØ×°Öµ
-                      BRT       = 256 - (Fosc/12/32/baud);
-                      
-                      AUXR |= 0x01;           //SIBRS = 1,´®¿Ú1Ñ¡ÔñÊ¹ÓÃ¶ÀÁ¢²¨ÌØÂÊ·¢ÉúÆ÷
-                      AUXR |= 0x10;           //BRTR = 1,Æô¶¯¶ÀÁ¢²¨ÌØÂÊ·¢ÉúÆ÷
-                      
-              #endif  
-C51 COMPILER V9.53.0.0   UART                                                              09/19/2016 16:10:28 PAGE 3   
+  97   1              
+  98   1              PCON &= 0x7F;           //²¨ÌØÂÊ²»¼Ó±¶
+  99   1              SCON  = 0x50;           //´®¿ÚÄ£Ê½1£,8Î»Êý¾Ý ¿É±ä²¨ÌØÂÊ
+ 100   1              
+ 101   1              if(foscPre == 1)
+ 102   1              {
+ 103   2                      AUXR |= 0x04;           //BRTx12 = 1£¬¶¨Ê±Æ÷Ê±ÖÓÎªFosc   ,¼´1 T
+ 104   2              }
+ 105   1              else
+ 106   1              {
+ 107   2                      AUXR &= 0xFB;           //BRTx12 = 0£¬¶¨Ê±Æ÷Ê±ÖÓÎªFosc/12,¼´12T
+ 108   2              }
+ 109   1              
+ 110   1      //      BRT   = 0xFB;           //ÉèÖÃ ¶ÀÁ¢²¨ÌØÂÊ·¢ÉúÆ÷ÖØ×°Öµ
+ 111   1              BRT       = 256 - (Fosc/12/32/baud);
+ 112   1              
+ 113   1              AUXR |= 0x01;           //SIBRS = 1,´®¿Ú1Ñ¡ÔñÊ¹ÓÃ¶ÀÁ¢²¨ÌØÂÊ·¢ÉúÆ÷
+ 114   1              AUXR |= 0x10;           //BRTR = 1,Æô¶¯¶ÀÁ¢²¨ÌØÂÊ·¢ÉúÆ÷
+ 115   1              
+ 116   1      #endif  
+C51 COMPILER V9.00   UART                                                                  09/19/2016 23:14:02 PAGE 3   
 
-                      
-              #ifdef UART_USE_INT
-                      ES    = 1;                      //´®¿ÚÖÐ¶ÏÔÊÐí
-              //      TI = 1;                 //ÒÆÖ²printfµÄ·½·¨2
-              #else
+ 117   1              
+ 118   1      #ifdef UART_USE_INT
+ 119   1              ES    = 1;                      //´®¿ÚÖÐ¶ÏÔÊÐí
+ 120   1      //      TI = 1;                 //ÒÆÖ²printfµÄ·½·¨2
+ 121   1      #else
                       ES    = 0;
               #endif  
+ 124   1      }
+ 125          
+ 126          #else
+              //ÉèÖÃ´®¿ÚÎª¹¤×÷·½Ê½0 TXDÊä³öÍ¬²½Âö³å£¬RXDÊä³ö´®ÐÐÊý¾Ý LSB
+              void UART_Init(void)
+              {
+                      SCON = 0x00;    //Í¬²½Í¨ÐÅ·½Ê½£¬TXDÊä³öÍ¬²½Âö³å£¬RXDÊä³ö´®ÐÐÊý¾Ý
+                      //ÉèÖÃ´®¿ÚÄ£Ê½0 Îª12·ÖÆµ
+                      AUXR &= ~(1 << 5);              //UART_M0x6 = 0;
+                      //ÉèÖÃ´®¿ÚÄ£Ê½0 Îª2·ÖÆµ
+              //      AUXR |= (1 << 5);
               }
               
-              #else
- 127          //ÉèÖÃ´®¿ÚÎª¹¤×÷·½Ê½0 TXDÊä³öÍ¬²½Âö³å£¬RXDÊä³ö´®ÐÐÊý¾Ý LSB
- 128          void UART_Init(void)
- 129          {
- 130   1              SCON = 0x00;    //Í¬²½Í¨ÐÅ·½Ê½£¬TXDÊä³öÍ¬²½Âö³å£¬RXDÊä³ö´®ÐÐÊý¾Ý
- 131   1              //ÉèÖÃ´®¿ÚÄ£Ê½0 Îª12·ÖÆµ
- 132   1              AUXR &= ~(1 << 5);              //UART_M0x6 = 0;
- 133   1              //ÉèÖÃ´®¿ÚÄ£Ê½0 Îª2·ÖÆµ
- 134   1      //      AUXR |= (1 << 5);
- 135   1      }
- 136          
- 137          #endif
+              #endif
  138          
  139          
  140          
@@ -186,51 +186,52 @@ line level    source
  172   2                      //Çå½ÓÊÕÖÐ¶Ï±êÖ¾Î»
  173   2                      RI = 0;
  174   2                      rdata = SBUF;                   //½ÓÊÕÊý¾Ý
- 175   2                      
- 176   2                      if(rdata == 0xFA)
- 177   2                      {
- 178   3                              tFlag = 1;
-C51 COMPILER V9.53.0.0   UART                                                              09/19/2016 16:10:28 PAGE 4   
+ 175   2                      UART_SendByte(rdata);   //´®¿Ú·¢ËÍÊý¾Ý»ØÏÔ
+ 176   2                      /*
+ 177   2                      if(rdata == 0xFA)
+ 178   2                      {
+C51 COMPILER V9.00   UART                                                                  09/19/2016 23:14:02 PAGE 4   
 
- 179   3                      }
- 180   2                      else if(rdata == 0xFF)
- 181   2                      {
- 182   3                              tFlag = 2;
- 183   3                      }
- 184   2                      else if(rdata == 0xFB)
- 185   2                      {
- 186   3                              tFlag = 3;
- 187   3                      }
- 188   2                      else
- 189   2                      {
- 190   3                              MsgIn(&recMessage,rdata);
- 191   3                              UART_SendByte(rdata);   //´®¿Ú·¢ËÍÊý¾Ý»ØÏÔ
- 192   3                      }
- 193   2      
- 194   2              }
- 195   1              else    // if(TI)
- 196   1              {
- 197   2                      //Çå·¢ËÍÖÐ¶Ï±êÖ¾Î»
- 198   2                      TI = 0;                 //ÒÆÖ²printfµÄ·½·¨2
- 199   2              }
- 200   1      }
- 201          #endif
- 202          
+ 179   2                              tFlag = 1;
+ 180   2                      }
+ 181   2                      else if(rdata == 0xFF)
+ 182   2                      {
+ 183   2                              tFlag = 2;
+ 184   2                      }
+ 185   2                      else if(rdata == 0xFB)
+ 186   2                      {
+ 187   2                              tFlag = 3;
+ 188   2                      }
+ 189   2                      else
+ 190   2                      {
+ 191   2                              MsgIn(&recMessage,rdata);
+ 192   2                              UART_SendByte(rdata);   //´®¿Ú·¢ËÍÊý¾Ý»ØÏÔ
+ 193   2                      }
+ 194   2      */
+ 195   2              }
+ 196   1              else    // if(TI)
+ 197   1              {
+ 198   2                      //Çå·¢ËÍÖÐ¶Ï±êÖ¾Î»
+ 199   2                      TI = 0;                 //ÒÆÖ²printfµÄ·½·¨2
+ 200   2              }
+ 201   1      }
+ 202          #endif
  203          
  204          
- 205          //´®¿ÚÒÆÖ²printf ·½·¨1
- 206          char putchar (char ch)
- 207          {
- 208   1              UART_SendByte(ch);
- 209   1              return ch;
- 210   1      }
- 211          
+ 205          
+ 206          //´®¿ÚÒÆÖ²printf ·½·¨1
+ 207          char putchar (char ch)
+ 208          {
+ 209   1              UART_SendByte(ch);
+ 210   1              return ch;
+ 211   1      }
  212          
  213          
+ 214          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    649    ----
+   CODE SIZE        =    605    ----
    CONSTANT SIZE    =     47    ----
    XDATA SIZE       =     72      10
    PDATA SIZE       =   ----    ----

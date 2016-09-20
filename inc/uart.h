@@ -1,7 +1,7 @@
 #ifndef __UART_H__
 #define __UART_H__
 
-// #define 	UART_IN_USE					//串口工作在模式1或模式0(undefine)
+#define 	UART_IN_USE					//串口工作在模式1或模式0(undefine)
 #define 	UART_USE_INT				//启用串口中断
 //#define 	USRT_USE_TIMER1				//使用定时器1作为波特率发生器
 
